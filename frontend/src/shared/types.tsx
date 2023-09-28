@@ -7,3 +7,7 @@ export type EventType = {
 	image: any;
 	title: string;
 };
+
+export interface EventsListProps {
+	events: EventType[];
+};

@@ -1,7 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import { EventType } from "../../shared/types";
+import { EventType } from "../../../shared/types";
 import classes from "./EventItem.module.css";
 
 const EventItem: FC<EventType> = ({ date, description, image, title }): JSX.Element => {

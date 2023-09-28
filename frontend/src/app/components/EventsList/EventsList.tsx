@@ -1,10 +1,9 @@
 "use client";
 
-import { FC } from "react";
-import { EventType } from "../../shared/types";
+import { EventType, EventsListProps } from "../../../shared/types";
 import classes from "./EventsList.module.css";
 
-const EventsList: FC<EventType[]> = (events): JSX.Element => {
+const EventsList = ({ events }: EventsListProps): JSX.Element => {
 	return (
 		<div className={classes.events}>
 			<h1>All Events</h1>
