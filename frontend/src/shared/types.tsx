@@ -1,5 +1,7 @@
 "use client";
 
+import { ReactNode } from "react";
+
 export type EventType = {
 	date: any;
 	description: any;
@@ -10,4 +12,9 @@ export type EventType = {
 
 export interface EventsListProps {
 	events: EventType[];
+}
+
+export type PageContentProps = {
+	title: string;
+	children: ReactNode;
 };

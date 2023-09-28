@@ -29,7 +29,6 @@ const EventForm = (): JSX.Element => {
 				<textarea
 					id="description"
 					name="description"
-					// rows="5"
 					required
 				/>
 			</p>
