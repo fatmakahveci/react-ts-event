@@ -1,17 +1,17 @@
 "use client";
 
-import { useRouteError } from "react-router-dom";
+import { ErrorResponse, useRouteError } from "react-router-dom";
 import MainNavigation from "../components/MainNavigation/MainNavigation";
 import PageContent from "../components/PageContent/PageContent";
 
 const ErrorPage = () => {
-	const error: any = useRouteError();
+	const error = useRouteError() as ErrorResponse;
 
 	let title: string = "An error occurred!";
 	let message: string = "Something went wrong!";
 
 	if (error.status === 500) {
-		message = JSON.parse(error.data).message;
+		message = error.data?.message;
 	}
 
 	if (error.status === 404) {

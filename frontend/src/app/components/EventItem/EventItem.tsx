@@ -1,22 +1,22 @@
 "use client";
 
-import { FC } from "react";
-import { EventType } from "../../../shared/types";
+import { Link } from "react-router-dom";
+import { EventTypeProps } from "../../../shared/types";
 import classes from "./EventItem.module.css";
 
-const EventItem: FC<EventType> = ({ date, description, image, title }): JSX.Element => {
+const EventItem = (event: EventTypeProps): JSX.Element => {
 	const startDeleteHandler = () => {
 		// ...
 	};
 
 	return (
 		<article className={classes.event}>
-			<img src={image} alt={title} />
-			<h1>{title}</h1>
-			<time>{date}</time>
-			<p>{description}</p>
+			<img src={event.event.image} alt={event.event.title} />
+			<h1>{event.event.title}</h1>
+			<time>{event.event.date}</time>
+			<p>{event.event.description}</p>
 			<menu className={classes.actions}>
-				<a href="edit">Edit</a>
+				<Link to="edit">Edit</Link>
 				<button onClick={startDeleteHandler}>Delete</button>
 			</menu>
 		</article>

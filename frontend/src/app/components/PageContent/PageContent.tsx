@@ -1,7 +1,6 @@
 "use client";
 
 import { FC } from "react";
-
 import { PageContentProps } from "../../../shared/types";
 import classes from "./PageContent.module.css";
 

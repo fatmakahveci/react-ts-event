@@ -1,10 +1,10 @@
 "use client";
 
 import { useNavigate } from "react-router-dom";
-
+import { EventType } from "../../../shared/types";
 import classes from "./EventForm.module.css";
 
-const EventForm = (): JSX.Element => {
+const EventForm = ({ event }: { event: EventType }): JSX.Element => {
 	const navigate = useNavigate();
 	function cancelHandler() {
 		navigate("..");
@@ -14,15 +14,33 @@ const EventForm = (): JSX.Element => {
 		<form className={classes.form}>
 			<p>
 				<label htmlFor="title">Title</label>
-				<input id="title" type="text" name="title" required />
+				<input
+					id="title"
+					type="text"
+					name="title"
+					required
+					defaultValue={event ? event.title : ""}
+				/>
 			</p>
 			<p>
 				<label htmlFor="image">Image</label>
-				<input id="image" type="url" name="image" required />
+				<input
+					id="image"
+					type="url"
+					name="image"
+					required
+					defaultValue={event ? event.image : ""}
+				/>
 			</p>
 			<p>
 				<label htmlFor="date">Date</label>
-				<input id="date" type="date" name="date" required />
+				<input
+					id="date"
+					type="date"
+					name="date"
+					required
+					defaultValue={event ? event.date : ""}
+				/>
 			</p>
 			<p>
 				<label htmlFor="description">Description</label>
@@ -30,6 +48,7 @@ const EventForm = (): JSX.Element => {
 					id="description"
 					name="description"
 					required
+					defaultValue={event ? event.description : ""}
 				/>
 			</p>
 			<div className={classes.actions}>
@@ -40,6 +59,6 @@ const EventForm = (): JSX.Element => {
 			</div>
 		</form>
 	);
-}
+};
 
 export default EventForm;

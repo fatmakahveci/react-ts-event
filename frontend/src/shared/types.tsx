@@ -10,6 +10,9 @@ export type EventType = {
 	title: string;
 };
 
+export type EventTypeProps = {
+	event: EventType;
+}
 export interface EventsListProps {
 	events: EventType[];
 }
