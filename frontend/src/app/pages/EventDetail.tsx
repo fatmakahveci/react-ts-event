@@ -8,10 +8,12 @@ import EventItem from "../components/EventItem/EventItem";
 type LoaderData = {
 	event: EventType;
 };
+
 const EventDetailPage = (): JSX.Element => {
 	const data = useRouteLoaderData("event-detail") as LoaderData;
 	return <EventItem event={data.event} />;
 };
+
 export default EventDetailPage;
 
 export async function loader({ params }: LoaderFunctionArgs) {
