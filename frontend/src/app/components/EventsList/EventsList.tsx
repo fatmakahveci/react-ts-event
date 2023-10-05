@@ -1,10 +1,10 @@
 "use client";
 
 import { Link } from "react-router-dom";
-import { EventType, EventsListProps } from "../../../shared/types";
+import { EventType } from "../../../shared/types";
 import classes from "./EventsList.module.css";
 
-const EventsList = ({ events }: EventsListProps): JSX.Element => {
+const EventsList = ({events}: { events: EventType[]}) : JSX.Element => {
 	return (
 		<div className={classes.events}>
 			<h1>All Events</h1>
