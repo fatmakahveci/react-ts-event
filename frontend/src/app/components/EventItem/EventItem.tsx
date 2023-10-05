@@ -1,20 +1,27 @@
 "use client";
 
-import { Link } from "react-router-dom";
-import { EventTypeProps } from "../../../shared/types";
+import { Link, SubmitFunction, useSubmit } from "react-router-dom";
+import { EventType } from "../../../shared/types";
 import classes from "./EventItem.module.css";
 
-const EventItem = (event: EventTypeProps): JSX.Element => {
-	const startDeleteHandler = () => {
-		// ...
+const EventItem = ({ event }: { event: EventType }): JSX.Element => {
+	const submit: SubmitFunction = useSubmit();
+	const startDeleteHandler = (): void => {
+		const proceed: boolean = window.confirm(
+			"Are you sure you want to delete?"
+		);
+
+		if (proceed) {
+			submit(null, { method: "delete" }); // (data that we want to submit, todo)
+		}
 	};
 
 	return (
 		<article className={classes.event}>
-			<img src={event.event.image} alt={event.event.title} />
-			<h1>{event.event.title}</h1>
-			<time>{event.event.date}</time>
-			<p>{event.event.description}</p>
+			<img src={event.image} alt={event.title} />
+			<h1>{event.title}</h1>
+			<time>{event.date}</time>
+			<p>{event.description}</p>
 			<menu className={classes.actions}>
 				<Link to="edit">Edit</Link>
 				<button onClick={startDeleteHandler}>Delete</button>
