@@ -1,12 +1,15 @@
 "use client";
 
 import { useLoaderData } from "react-router-dom";
-import { EventType } from "../../shared/types";
 import EventsList from "../components/EventsList/EventsList";
+import { EventType } from "../../shared/types";
+
+type LoaderData = {
+	events: EventType[];
+};
 
 const EventsPage = (): JSX.Element => {
-	const data: any = useLoaderData();
-
+	const data = useLoaderData() as LoaderData;
 	return <EventsList events={data.events} />;
 };
 

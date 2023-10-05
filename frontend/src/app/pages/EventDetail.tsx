@@ -1,7 +1,7 @@
 "use client";
 
 import type { LoaderFunctionArgs } from "react-router-dom";
-import { json, useRouteLoaderData } from "react-router-dom";
+import { json, redirect, useRouteLoaderData } from "react-router-dom";
 import { EventType } from "../../shared/types";
 import EventItem from "../components/EventItem/EventItem";
 
@@ -16,10 +16,10 @@ const EventDetailPage = (): JSX.Element => {
 
 export default EventDetailPage;
 
-export async function loader({ params }: LoaderFunctionArgs) {
-	const id: string | undefined = params.eventId;
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
+	const eventId: string | undefined = params.eventId;
 	const response: Response = await fetch(
-		"http://localhost:8080/events/" + id
+		"http://localhost:8080/events/" + eventId
 	);
 
 	if (!response.ok) {
@@ -32,4 +32,23 @@ export async function loader({ params }: LoaderFunctionArgs) {
 	} else {
 		return response;
 	}
-}
+};
+
+export const action = async ({ request, params }: LoaderFunctionArgs) => {
+	const eventId: string | undefined = params.eventId;
+	const response: Response = await fetch(
+		"http://localhost:8080/events/" + eventId,
+		{ method: request.method }
+	);
+
+	if (!response.ok) {
+		throw json(
+			{ message: "Could not delete the event." },
+			{
+				status: 500,
+			}
+		);
+	} else {
+		return redirect("/events");
+	}
+};
