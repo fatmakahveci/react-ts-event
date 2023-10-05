@@ -3,19 +3,12 @@
 import { ReactNode } from "react";
 
 export type EventType = {
-	date: any;
-	description: any;
+	date: string;
+	description: string;
 	id: string;
-	image: any;
+	image: string;
 	title: string;
 };
-
-export type EventTypeProps = {
-	event: EventType;
-}
-export interface EventsListProps {
-	events: EventType[];
-}
 
 export type PageContentProps = {
 	title: string;
