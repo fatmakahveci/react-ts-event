@@ -1,21 +1,28 @@
 "use client";
 
-import { useLoaderData } from "react-router-dom";
-import EventsList from "../components/EventsList/EventsList";
+import { Suspense } from "react";
+import { Await, defer, useLoaderData } from "react-router-dom";
 import { EventType } from "../../shared/types";
+import EventsList from "../components/EventsList/EventsList";
 
 type LoaderData = {
 	events: EventType[];
 };
 
 const EventsPage = (): JSX.Element => {
-	const data = useLoaderData() as LoaderData;
-	return <EventsList events={data.events} />;
+	const { events } = useLoaderData() as LoaderData;
+	return (
+		<Suspense fallback={<p style={{ textAlign: "center" }}>Loading...</p>}>
+			<Await resolve={events}>
+				{(loadedEvents) => <EventsList events={loadedEvents} />}
+			</Await>
+		</Suspense>
+	);
 };
 
 export default EventsPage;
 
-export const loader = async () => {
+const loadEvents = async (): Promise<Response> => {
 	const response: Response = await fetch("http://localhost:8080/events");
 
 	if (!response.ok) {
@@ -26,6 +33,13 @@ export const loader = async () => {
 			}
 		);
 	} else {
-		return response;
+		const resData = await response.json();
+		return resData.events;
 	}
+};
+
+export const loader = async () => {
+	return defer({
+		events: loadEvents(),
+	});
 };
