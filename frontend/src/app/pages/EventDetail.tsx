@@ -12,6 +12,7 @@ import {
 import { EventType } from "../../shared/types";
 import EventItem from "../components/EventItem/EventItem";
 import EventsList from "../components/EventsList/EventsList";
+import { getAuthToken } from "../util/auth";
 
 type LoaderData = {
 	event: EventType;
@@ -85,9 +86,16 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
 	const eventId: string | undefined = params.eventId;
+	const token: string | null = getAuthToken();
+
 	const response: Response = await fetch(
 		"http://localhost:8080/events/" + eventId,
-		{ method: request.method }
+		{
+			method: request.method,
+			headers: {
+				"Authorization": "Bearer " + token
+			}
+		}
 	);
 
 	if (!response.ok) {
