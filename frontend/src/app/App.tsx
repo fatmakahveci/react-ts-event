@@ -1,11 +1,11 @@
 "use client";
 
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { action as manipulateEventAction } from "./components/EventForm/EventForm";
+// import { action as manipulateEventAction } from "./components/EventForm/EventForm";
 import AuthenticationPage, {
 	action as authAction,
 } from "./pages/Authentication";
-import EditEventPage from "./pages/EditEvent";
+// import EditEventPage from "./pages/EditEvent";
 import ErrorPage from "./pages/Error";
 import EventDetailPage, {
 	action as deleteEventAction,
@@ -50,8 +50,8 @@ const router = createBrowserRouter([
 							},
 							{
 								path: "edit",
-								element: <EditEventPage />,
-								action: manipulateEventAction,
+								// element: <EditEventPage />,
+								// action: manipulateEventAction,
 								loader: checkAuthLoader,
 							},
 						],
@@ -59,7 +59,7 @@ const router = createBrowserRouter([
 					{
 						path: "new",
 						element: <NewEventPage />,
-						action: manipulateEventAction,
+						// action: manipulateEventAction,
 						loader: checkAuthLoader,
 					},
 				],

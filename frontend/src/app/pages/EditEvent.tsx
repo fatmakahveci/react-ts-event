@@ -1,13 +1,13 @@
-"use client";
+// "use client";
 
-import {
-	useRouteLoaderData
-} from "react-router-dom";
-import EventForm from "../components/EventForm/EventForm";
+// import {
+// 	useRouteLoaderData
+// } from "react-router-dom";
+// import EventForm from "../components/EventForm/EventForm";
 
-const EditEventPage = (): JSX.Element => {
-	const data: any = useRouteLoaderData("event-detail");
-	return <EventForm method="patch" event={data.event} />;
-};
+// const EditEventPage = (): JSX.Element => {
+// 	const data: any = useRouteLoaderData("event-detail");
+// 	return <EventForm method="patch" event={data.event} />;
+// };
 
-export default EditEventPage;
+// export default EditEventPage;
