@@ -17,6 +17,7 @@ A full-stack event application with account authentication, protected event mana
 
 - React
 - TypeScript
+- Vite
 - React Router
 - Express
 - JSON Web Tokens
@@ -26,7 +27,7 @@ A full-stack event application with account authentication, protected event mana
 
 ### Prerequisites
 
-- Node.js 18 or newer
+- Node.js 20.19 or newer
 - npm
 
 ### Installation
@@ -39,15 +40,16 @@ npm start
 # In a second terminal
 cd frontend
 npm install
-npm start
+npm run dev
 ```
 
-The frontend opens on http://localhost:3000 and communicates with the local backend.
+The frontend opens on http://localhost:5173 and communicates with the local backend on port 3000.
 
 ## Quality Checks
 
 ```bash
-cd frontend && CI=true npm test -- --watchAll=false
+cd frontend && npm test
+cd frontend && npm run typecheck
 cd frontend && npm run build
 ```
 
