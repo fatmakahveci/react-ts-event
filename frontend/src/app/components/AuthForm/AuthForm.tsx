@@ -3,7 +3,6 @@
 import {
 	Form,
 	Link,
-	Navigation,
 	useActionData,
 	useNavigation,
 	useSearchParams,
@@ -18,8 +17,8 @@ interface ActionData {
 
 const AuthForm = (): JSX.Element => {
 	const data = useActionData() as ActionData;
-	const navigation: Navigation = useNavigation();
-	const [searchParams]: [URLSearchParams, any] = useSearchParams();
+	const navigation = useNavigation();
+	const [searchParams] = useSearchParams();
 	const isLogin: boolean = searchParams.get("mode") === "login";
 	const isSubmitting: boolean = navigation.state === "submitting";
 

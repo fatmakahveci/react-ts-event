@@ -4,8 +4,7 @@ import { Suspense } from "react";
 import type { LoaderFunctionArgs } from "react-router-dom";
 import {
 	Await,
-	defer,
-	json,
+	data,
 	redirect,
 	useRouteLoaderData,
 } from "react-router-dom";
@@ -47,7 +46,7 @@ const loadEvent = async (id: string): Promise<Response> => {
 	const response = await fetch("http://localhost:8080/events/" + id);
 
 	if (!response.ok) {
-		throw json(
+		throw data(
 			{ message: "Could not fetch details for selected event." },
 			{
 				status: 500,
@@ -63,7 +62,7 @@ const loadEvents = async (): Promise<Response> => {
 	const response: Response = await fetch("http://localhost:8080/events");
 
 	if (!response.ok) {
-		throw json(
+		throw data(
 			{ message: "Could not fetch events." },
 			{
 				status: 500,
@@ -78,10 +77,10 @@ const loadEvents = async (): Promise<Response> => {
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 	const eventId: any = params.eventId;
 
-	return defer({
+	return {
 		event: await loadEvent(eventId),
 		events: loadEvents(),
-	});
+	};
 };
 
 export const action = async ({ request, params }: LoaderFunctionArgs) => {
@@ -99,7 +98,7 @@ export const action = async ({ request, params }: LoaderFunctionArgs) => {
 	);
 
 	if (!response.ok) {
-		throw json(
+		throw data(
 			{ message: "Could not delete the event." },
 			{
 				status: 500,

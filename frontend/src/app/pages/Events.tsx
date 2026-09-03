@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
-import { Await, defer, useLoaderData } from "react-router-dom";
+import { Await, useLoaderData } from "react-router-dom";
 import { EventType } from "../../shared/types";
 import EventsList from "../components/EventsList/EventsList";
 
@@ -39,7 +39,7 @@ const loadEvents = async (): Promise<Response> => {
 };
 
 export const loader = async () => {
-	return defer({
+	return {
 		events: loadEvents(),
-	});
+	};
 };

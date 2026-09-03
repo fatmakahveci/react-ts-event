@@ -1,6 +1,6 @@
 "use client";
 
-import { json, redirect } from "react-router-dom";
+import { data as routerData, redirect } from "react-router-dom";
 import AuthForm from "../components/AuthForm/AuthForm";
 
 const AuthenticationPage = (): JSX.Element => {
@@ -13,7 +13,7 @@ export const action = async ({ request }: { request: any }) => {
 	const mode: string = searchParams.get("mode") || "login";
 
 	if (mode !== "login" && mode !== "signup") {
-		throw json({ message: "Unsupported mode: " + mode }, { status: 422 });
+		throw routerData({ message: "Unsupported mode: " + mode }, { status: 422 });
 	}
 
 	const data: FormData = await request.formData();
@@ -35,7 +35,7 @@ export const action = async ({ request }: { request: any }) => {
 	}
 
 	if (!response.ok) {
-		throw json(
+		throw routerData(
 			{ message: "Could not authenticate user." },
 			{ status: 500 }
 		);
