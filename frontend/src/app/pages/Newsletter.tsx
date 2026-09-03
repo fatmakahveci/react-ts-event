@@ -1,6 +1,5 @@
 "use client";
 
-import { LoaderFunctionArgs } from "react-router-dom";
 import NewsletterSignup from "../components/NewsletterSignup/NewsletterSignup";
 import PageContent from "../components/PageContent/PageContent";
 
@@ -14,11 +13,6 @@ const NewsletterPage = (): JSX.Element => {
 
 export default NewsletterPage;
 
-export const action = async ({
-	request,
-}: LoaderFunctionArgs): Promise<{ message: string }> => {
-	const data: FormData = await request.formData();
-	const email = data.get("email");
-	console.log(email);
+export const action = async (): Promise<{ message: string }> => {
 	return { message: "Signup successful!" };
 };

@@ -18,7 +18,6 @@ const RootLayout = (): JSX.Element => {
 		}
 
 		const tokenDuration = getTokenDuration();
-		console.log(tokenDuration);
 
 		setTimeout(() => {
 			submit(null, { action: "/logout", method: "post" });

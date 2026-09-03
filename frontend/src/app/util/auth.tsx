@@ -14,8 +14,7 @@ export const checkAuthLoader = () => {
 
 export const getAuthToken = () => {
 	const token = localStorage.getItem("token");
-	console.log(token);
-    if (!token) {
+	if (!token) {
 		return null;
 	}
 
@@ -30,7 +29,6 @@ export const getAuthToken = () => {
 
 export const getTokenDuration = () => {
 	const storedExpirationDate = localStorage.getItem("expiration");
-	console.log(storedExpirationDate);
 	
 	if (storedExpirationDate === null) return 0;
 	const expirationDate = new Date(storedExpirationDate);
