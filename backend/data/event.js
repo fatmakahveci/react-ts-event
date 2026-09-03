@@ -27,8 +27,10 @@ async function get(id) {
 
 async function add(data) {
 	const storedData = await readData();
-	storedData.events.unshift({ ...data, id: generateId() });
+	const event = { ...data, id: generateId() };
+	storedData.events.unshift(event);
 	await writeData(storedData);
+	return event;
 }
 
 async function replace(id, data) {
@@ -49,6 +51,10 @@ async function replace(id, data) {
 
 async function remove(id) {
 	const storedData = await readData();
+	const eventExists = storedData.events.some((event) => event.id === id);
+	if (!eventExists) {
+		throw new NotFoundError("Could not find event for id " + id);
+	}
 	const updatedData = storedData.events.filter((ev) => ev.id !== id);
 	await writeData({ ...storedData, events: updatedData });
 }

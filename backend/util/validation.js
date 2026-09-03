@@ -4,7 +4,7 @@ function isValidText(value, minLength = 1) {
 
 function isValidDate(value) {
 	const date = new Date(value);
-	return value && date !== "Invalid Date";
+	return Boolean(value) && !Number.isNaN(date.getTime());
 }
 
 function isValidImageUrl(value) {
