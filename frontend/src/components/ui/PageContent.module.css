@@ -1,3 +1,4 @@
-.content {
-    text-align: center;
-}
+.content { max-width: 42rem; margin: 3.5rem auto 5rem; padding: 3rem 2rem; text-align: center; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); box-shadow: var(--shadow); }
+.content h1 { font-size: clamp(2rem, 4vw, 3rem); margin: .25rem 0 1rem; }
+.content > p { color: var(--muted); max-width: 30rem; margin: 1rem auto; }
+@media (max-width: 500px) { .content { padding: 2rem 1.25rem; margin: 2rem auto 3rem; } }

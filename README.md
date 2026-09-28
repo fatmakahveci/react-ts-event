@@ -11,12 +11,12 @@ Express API that stores data in a local JSON file.
 
 ## Demo
 
-[![Searching and saving events, then creating and editing a gathering in Gather](docs/assets/demo.gif)](docs/assets/demo.gif)
+[![Gather on desktop and mobile: finding, saving, creating, and editing events](docs/assets/demo.gif)](docs/assets/demo.gif)
 
-This 29-second walkthrough shows search, favorites, sharing, and creating and
-editing an event, including the prompt that protects an unsaved draft. Recorded
-on September 28, 2026, with temporary sample data. A fresh install starts with an
-empty event list.
+This 33-second walkthrough shows the updated desktop and mobile layouts, search,
+favorites, sharing, and creating and editing an event. It also covers the mobile
+menu and the prompt that protects an unsaved draft. Recorded on September 28,
+2026, with temporary sample data. A fresh install starts with an empty event list.
 
 Search, sorting, and date filters stay in the URL, so you can bookmark a view or
 share it. The star button saves favorites in the current browser; they aren't
@@ -96,7 +96,7 @@ For shorter feedback loops, run just the checks you need:
 | `npm test --prefix backend` | API and backend unit tests. |
 | `npm run build` | TypeScript checking and the frontend production build. |
 
-The latest local check on September 28, 2026, passed **58 frontend tests and
+The latest local check on September 28, 2026, passed **63 frontend tests and
 36 backend tests**, coverage thresholds, TypeScript checking, and the production
 build on Node 24.21.0. Tests cover event ownership, session revocation, CSRF,
 redirect validation, request limits, and form recovery after connection failures.
@@ -211,7 +211,7 @@ clients need to preserve cookies and send the CSRF header described in the
 
 - [Contributing](.github/CONTRIBUTING.md)
 - [CI/CD and deployment](docs/ci-cd.md)
-- [Reporting a security issue](.github/SECURITY.md)
+- [Reporting a security issue](SECURITY.md)
 - [Security fixes and remaining limits](docs/security-hardening.md)
 - [Feature changes](docs/improvements.md)
 - [Dependency updates](docs/dependencies.md)

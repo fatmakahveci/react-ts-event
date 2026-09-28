@@ -1,9 +1,21 @@
-.header { max-width:1200px; margin:auto; padding:1.5rem 2rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; border-bottom:1px solid var(--border); }
-.brand { font-size:1.9rem; font-weight:750; letter-spacing:-.08em; text-decoration:none; color:var(--ink); }
-.list { display:flex; align-items:center; gap:2rem; font-size:.9rem; }
-.list a { text-decoration:none; color:var(--muted); }
-.list a:hover,.list a.active { color:var(--accent); }
-.list .account { display:inline-flex; gap:1.4rem; align-items:center; padding:.6rem 1rem; border:1px solid var(--border); border-radius:7px; color:var(--ink); background:transparent; font-size:.9rem; }
-@media(max-width:540px) { .header { padding:1.1rem; } .list { gap:.9rem; font-size:.8rem; } .brand { font-size:1.6rem; } .list .account { padding:.45rem .65rem; gap:.4rem; } }
+.header { position: sticky; top: 0; z-index: 20; max-width: 1200px; margin: auto; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; border-bottom: 1px solid var(--border); background: #faf9f5f5; backdrop-filter: blur(16px); }
+.brand { font-size: 1.9rem; font-weight: 750; letter-spacing: -.08em; text-decoration: none; color: var(--ink); }
+.list { display: flex; align-items: center; gap: .4rem; font-size: .85rem; }
+.list a { display: flex; min-height: 44px; align-items: center; padding: .55rem .9rem; border-radius: 8px; text-decoration: none; color: var(--muted); }
+.list a:hover, .list a.active { color: var(--accent); background: var(--surface-soft); }
+.list a.active { font-weight: 600; }
+.list .account { display: inline-flex; gap: 1rem; align-items: center; min-height: 44px; margin-left: .8rem; padding: .6rem 1rem; border: 1px solid #bac7b2; border-radius: 8px; color: var(--ink); background: transparent; font-size: .85rem; }
+.account:hover { background: var(--surface-soft); }
+.menuToggle { display: none; background: transparent; color: var(--ink); border-color: var(--border); padding: .5rem .75rem; }
+.menuToggle:hover { background: var(--surface-soft); }
 
-@media(max-width:650px) { .header { align-items:flex-start; } .list { flex-wrap:wrap; justify-content:flex-end; gap:.65rem 1rem; } }
+@media (max-width: 680px) {
+  .header { padding: .8rem 1rem; }
+  .brand { font-size: 1.7rem; }
+  .menuToggle { display: inline-flex; }
+  .navigation { display: none; position: absolute; top: 100%; left: 0; right: 0; padding: .75rem 1rem 1rem; background: #faf9f5; border-bottom: 1px solid var(--border); box-shadow: var(--shadow); }
+  .navigation[data-open="true"] { display: block; }
+  .list { align-items: stretch; flex-direction: column; gap: .35rem; }
+  .list a { padding: .75rem 1rem; }
+  .list .account { display: flex; justify-content: space-between; width: 100%; margin: .4rem 0 0; }
+}

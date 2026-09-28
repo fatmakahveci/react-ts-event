@@ -89,7 +89,7 @@ process, rate limits remain per process, signup reveals duplicate emails, and
 email verification/account recovery are absent. HttpOnly does not prevent a
 compromised browser script from issuing requests. Frontend response headers must
 be configured by its static host; the API headers do not protect a separate host.
-See the [security policy](../.github/SECURITY.md) for deployment boundaries.
+See the [security policy](../SECURITY.md) for deployment boundaries.
 
 The session and CSRF design follows the relevant guidance in the
 [OWASP session management](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html)

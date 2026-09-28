@@ -25,6 +25,14 @@ test("sorts a copy of the event collection by name", () => {
   expect(events[0].title).toBe("Zebra meetup");
 });
 
+test("resets a sorting-only selection through the clear filters action", () => {
+  render(<MemoryRouter initialEntries={["/events?sort=title"]}><EventList events={events} /></MemoryRouter>);
+  fireEvent.click(screen.getByRole("button", { name: "Clear filters" }));
+  expect(screen.getByLabelText("Sort by")).toHaveValue("date");
+  expect(screen.getAllByRole("heading", { level: 2 }).map(node => node.textContent)).toEqual(["Zebra meetup", "Art workshop"]);
+  expect(screen.queryByRole("button", { name: "Clear filters" })).not.toBeInTheDocument();
+});
+
 function Location() { return <output data-testid="location">{useLocation().search}</output>; }
 test("restores URL filters and writes searches and sorting back to the URL", () => {
   render(<MemoryRouter initialEntries={["/events?q=painting&sort=title"]}><EventList events={events} /><Location /></MemoryRouter>);
