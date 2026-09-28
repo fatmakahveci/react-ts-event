@@ -1,0 +1,3 @@
+.newsletter { display:grid; gap:1rem; max-width:28rem; margin:2rem auto; text-align:left; }
+.newsletter input { width:100%; }
+.newsletter p { color:var(--muted); }

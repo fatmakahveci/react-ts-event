@@ -1,0 +1,26 @@
+.events { margin:3rem auto 5rem; }
+.events h1 { font-size:clamp(2.3rem,5vw,3.6rem); letter-spacing:-.055em; margin:.75rem 0; }
+.intro { color:var(--muted); }
+.toolbar { display:flex; gap:1rem; padding:1.5rem 0 .5rem; }
+.toolbar > div:first-child { flex:1; }
+.toolbar label { display:block; }
+.toolbar input,.toolbar select { width:100%; }
+.count { font-size:.8rem; color:var(--muted); margin:1rem 0 1.5rem; }
+.list { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr)); gap:1.5rem; }
+.item { min-width:0; border:1px solid var(--border); border-radius:12px; overflow:hidden; background:var(--surface); transition:box-shadow .2s; }
+.item:hover { box-shadow:0 10px 25px #23352a10; }
+.item a { display:block; height:100%; color:inherit; text-decoration:none; }
+.item img { width:100%; aspect-ratio:16/10; object-fit:cover; background:#e5eadd; }
+.content { padding:1.4rem; }
+.content time { color:var(--accent); font-size:.75rem; font-weight:600; }
+.content h2 { font-size:1.3rem; letter-spacing:-.025em; margin:.7rem 0; }
+.content p { color:var(--muted); font-size:.9rem; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.content > span { display:block; border-top:1px solid var(--border); padding-top:1rem; margin-top:1.5rem; font-size:.8rem; font-weight:600; }
+.empty { text-align:center; border:1px dashed var(--border); border-radius:12px; padding:3rem 1rem; }
+@media(max-width:500px) { .toolbar { flex-direction:column; } }
+.item { position:relative; }
+.favorite { position:absolute; top:.75rem; right:.75rem; width:2.6rem; height:2.6rem; padding:0; background:#fff; color:var(--accent); box-shadow:0 2px 8px #0002; border:1px solid var(--border); border-radius:50%; font-size:1.4rem; }
+.favorite:hover { background:#edf2e7; }
+.filterActions,.pagination { display:flex; gap:1rem; align-items:center; flex-wrap:wrap; }
+.pagination { justify-content:center; margin-top:2rem; }
+@media(max-width:760px) { .toolbar { flex-wrap:wrap; } .toolbar > div:first-child { flex-basis:100%; } }

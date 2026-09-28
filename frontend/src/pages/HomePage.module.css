@@ -1,0 +1,25 @@
+.hero { display:grid; grid-template-columns:1.15fr 1fr; align-items:center; gap:4rem; padding:5rem 0 6rem; }
+.hero h1 { font-size:clamp(3rem,6.2vw,5.6rem); line-height:1.06; letter-spacing:-.065em; margin:1.4rem 0; font-weight:650; }
+.hero h1 em { font-family:Georgia,serif; font-weight:400; color:var(--accent); }
+.hero p { max-width:30rem; font-size:1.1rem; line-height:1.8; color:var(--muted); }
+.actions { display:flex; flex-wrap:wrap; align-items:center; gap:1.7rem; margin:2rem 0; }
+.note { display:flex; align-items:center; gap:.7rem; color:var(--muted); font-size:.8rem; margin-top:2.8rem; }
+.note span { color:var(--accent); font-size:1.6rem; }
+.art { min-height:430px; position:relative; display:grid; place-items:center; background:#e5eadd; border-radius:50% 50% 12px 12px; overflow:hidden; }
+.orbit { position:absolute; width:390px; height:390px; border:1px solid #bcc9af; border-radius:50%; transform:translate(40px,90px); }
+.ticket { position:relative; background:#f8f5e9; width:70%; padding:2rem; transform:rotate(-9deg); box-shadow:0 20px 40px #30442e20; border-radius:8px; }
+.ticket > span { font-size:.65rem; letter-spacing:.15em; }
+.ticket strong { display:block; font-size:2.9rem; letter-spacing:-.05em; line-height:1.15; margin:1.4rem 0 2rem; font-weight:600; }
+.ticket > div { border-top:1px dashed #aeb7a1; padding-top:1rem; display:flex; justify-content:space-between; font-size:.7rem; letter-spacing:.15em; }
+.spark { position:absolute; top:4px; right:20px; font-size:7rem; line-height:1; color:var(--accent); z-index:1; }
+.badge { position:absolute; bottom:25px; right:10px; padding:1.1rem 1.5rem; background:#dce987; border-radius:50%; font-size:.65rem; font-weight:700; text-align:center; transform:rotate(10deg); }
+.discover { border-top:1px solid var(--border); padding:3.5rem 0 4rem; }
+.sectionHeading { display:flex; justify-content:space-between; align-items:center; gap:2rem; margin-bottom:2rem; }
+.sectionHeading h2 { font-size:2rem; letter-spacing:-.04em; margin:.7rem 0; }
+.cards { display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; }
+.cards article { padding:1.8rem; border:1px solid var(--border); border-radius:12px; background:var(--surface); }
+.cards article > div { display:flex; justify-content:space-between; align-items:center; color:var(--muted); font-size:.75rem; }
+.cards b { font-size:2rem; color:var(--accent); font-weight:400; }
+.cards h3 { margin:1.7rem 0 .6rem; font-size:1.15rem; }
+.cards p { color:var(--muted); font-size:.9rem; line-height:1.7; }
+@media(max-width:760px) { .hero { grid-template-columns:1fr; padding:3rem 0; gap:2rem; } .art { min-height:360px; max-width:460px; width:100%; justify-self:center; } .cards { grid-template-columns:1fr; } .sectionHeading { align-items:start; flex-direction:column; gap:.5rem; } .ticket strong { font-size:2.5rem; } }

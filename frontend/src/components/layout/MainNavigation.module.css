@@ -1,0 +1,9 @@
+.header { max-width:1200px; margin:auto; padding:1.5rem 2rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; border-bottom:1px solid var(--border); }
+.brand { font-size:1.9rem; font-weight:750; letter-spacing:-.08em; text-decoration:none; color:var(--ink); }
+.list { display:flex; align-items:center; gap:2rem; font-size:.9rem; }
+.list a { text-decoration:none; color:var(--muted); }
+.list a:hover,.list a.active { color:var(--accent); }
+.list .account { display:inline-flex; gap:1.4rem; align-items:center; padding:.6rem 1rem; border:1px solid var(--border); border-radius:7px; color:var(--ink); background:transparent; font-size:.9rem; }
+@media(max-width:540px) { .header { padding:1.1rem; } .list { gap:.9rem; font-size:.8rem; } .brand { font-size:1.6rem; } .list .account { padding:.45rem .65rem; gap:.4rem; } }
+
+@media(max-width:650px) { .header { align-items:flex-start; } .list { flex-wrap:wrap; justify-content:flex-end; gap:.65rem 1rem; } }
