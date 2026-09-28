@@ -1,0 +1,17 @@
+{
+  "name": "gather-event-platform",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A community event platform built with React, TypeScript and Express",
+  "engines": {
+    "node": "^24.15.0 || >=26.0.0"
+  },
+  "scripts": {
+    "setup": "npm ci --prefix backend && npm ci --prefix frontend && node backend/scripts/initialize-data.js",
+    "dev": "npm run dev --prefix frontend",
+    "dev:api": "npm start --prefix backend",
+    "build": "npm run build --prefix frontend",
+    "test": "npm test --prefix frontend && npm test --prefix backend",
+    "check": "npm run test:coverage --prefix frontend && npm run test:coverage --prefix backend && npm run build"
+  }
+}

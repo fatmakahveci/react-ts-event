@@ -7,12 +7,18 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     restoreMocks: true,
-    setupFiles: "./src/test/setup.ts",
+    setupFiles: "./src/test/setup-tests.ts",
     coverage: {
       provider: "v8",
       include: [
-        "src/app/pages/{Authentication,EventDetail,Events,Logout,Newsletter}.tsx",
-        "src/app/util/auth.tsx",
+        "src/features/auth/pages/AuthPage.tsx",
+        "src/features/auth/actions/logout.ts",
+        "src/features/auth/lib/session.ts",
+        "src/features/events/pages/{EventDetails,Events}Page.tsx",
+        "src/features/events/components/EventForm.tsx",
+        "src/features/newsletter/pages/NewsletterPage.tsx",
+        "src/lib/api-client.ts",
+        "src/features/events/lib/events-api.ts",
       ],
       thresholds: {
         lines: 80,

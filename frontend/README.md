@@ -4,17 +4,17 @@ The React and TypeScript client for React Event Platform, built with Vite and Re
 
 ## Requirements
 
-- Node.js 20.19 or newer
+- Node.js 24.15+ within the 24.x line, or 26+ (`.nvmrc` at the repository root selects 24 LTS)
 - npm
 
 ## Development
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
-The development server runs at http://localhost:5173. Start the repository's backend separately on port 3000.
+The development server runs at http://localhost:5173. Start the repository's backend separately on port 8080.
 
 ## Quality Commands
 

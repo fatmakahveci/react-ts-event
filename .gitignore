@@ -38,3 +38,11 @@ next-env.d.ts
 .next/
 .swc/
 .*.env
+
+.env
+.env.*
+!.env.example
+
+# Live application data contains password hashes, session records, and emails.
+/backend/storage/application-data.json
+/backend/storage/*.tmp
