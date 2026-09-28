@@ -1,6 +1,7 @@
 const express = require("express");
 const repository = require("../repositories/event.repository");
 const { checkAuth } = require("../middleware/auth.middleware");
+const { createRateLimit } = require("../middleware/rate-limit.middleware");
 const { isValidText, isValidDate, isValidImageUrl } = require("../lib/validation");
 const router = express.Router();
 router.get("/", async (req, res, next) => {
@@ -9,7 +10,9 @@ router.get("/", async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
   try { res.json({ event: await repository.get(req.params.id) }); } catch (error) { next(error); }
 });
-router.use(checkAuth);
+// Bound storage work before session lookup, then share an account budget across all its sessions.
+router.use(createRateLimit({ limit: 60 }), checkAuth,
+  createRateLimit({ limit: 30, keyGenerator: req => req.user.id }));
 function validateEvent(req, res, next) {
   const payload = Object.fromEntries(["title", "description", "date", "image"].map(key => [key, typeof req.body[key] === "string" ? req.body[key].trim() : req.body[key]]));
   const errors = {};

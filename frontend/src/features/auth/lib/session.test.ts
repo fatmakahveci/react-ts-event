@@ -61,3 +61,20 @@ test("broadcasts only an opaque change notification and tolerates blocked storag
   expect(() => { rememberSession(session()); notifySessionChange(); clearSession(); }).not.toThrow();
   expect(getSession()).toBeNull();
 });
+
+test.each([
+  "/events/..//evil.example",
+  "/%2e%2e//evil.example",
+  "/a/%2E%2E///evil.example/path?next=1#top",
+  "/a/../ /..//evil.example",
+])("rejects return paths that normalize into external redirects: %s", path => {
+  expect(safeReturnTo(path)).toBe("/");
+});
+
+test("keeps normalized local destinations and embedded URLs local", () => {
+  for (const path of ["/events/../newsletter", "/events?url=https://example.com", "/events#//example.com", "/events/%2fexample.com"]) {
+    const target = safeReturnTo(path);
+    expect(new URL(target, "https://gather.local").origin).toBe("https://gather.local");
+    expect(safeReturnTo(target)).toBe(target);
+  }
+});

@@ -62,7 +62,7 @@ test("turns unexpected API failures into route errors", async () => {
 
 test("returns to the requested page after login and ignores external redirects", async () => {
   vi.spyOn(globalThis, "fetch").mockImplementation(async () => new Response(JSON.stringify(session())));
-  for (const [target, expected] of [["/events/new", "/events/new"], ["//evil.example", "/"]]) {
+  for (const [target, expected] of [["/events/new", "/events/new"], ["//evil.example", "/"], ["/events/..//evil.example", "/"], ["/%2e%2e//evil.example", "/"]]) {
     const request = new Request(`http://localhost/auth?mode=login&redirectTo=${encodeURIComponent(target)}`, { method: "POST", body: new URLSearchParams({ email: "reader@example.com", password: "secret123" }) });
     const result = await action({ request }) as Response;
     expect(result.headers.get("Location")).toBe(expected);
