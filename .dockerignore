@@ -1,0 +1,15 @@
+.git
+.github
+.agents
+.codex
+**/node_modules
+**/coverage
+**/dist
+**/.env
+**/.env.*
+**/*.log
+**/*.pem
+backend/storage/application-data.json
+backend/storage/*.tmp
+docs
+runtime-images.tar.gz*
