@@ -1,7 +1,26 @@
-.form { max-width:42rem; margin:3rem auto 5rem; padding:2rem; border:1px solid var(--border); border-radius:12px; background:var(--surface); }
-.form h1 { font-size:2.3rem; letter-spacing:-.04em; margin:.8rem 0; }
-.form > p { color:var(--muted); }
-.form label,.form input,.form textarea { display:block; width:100%; }
-.form label { color:var(--ink); }
-.actions { display:flex; align-items:center; gap:1.5rem; justify-content:flex-end; margin-top:2rem; }
-@media(max-width:500px) { .form { padding:1.25rem; } }
+.layout { display: grid; grid-template-columns: .9fr 1.1fr; max-width: 940px; margin: 3.5rem auto 5rem; border: 1px solid var(--border); border-radius: 20px; overflow: hidden; background: var(--surface); box-shadow: var(--shadow); }
+.welcome { position: relative; padding: 2.75rem; background: #294b37; color: #fffdf2; }
+.eyebrow { font-size: .6rem; font-weight: 650; letter-spacing: .12em; color: #d7e4c7; }
+.symbol { font-size: 4.5rem; line-height: 1; color: #dce987; margin: 2rem 0 1rem; }
+.welcome h2 { font-size: clamp(2.4rem, 4vw, 3.25rem); margin: 0 0 1.4rem; line-height: 1.05; }
+.welcome h2 em { font-family: Georgia, serif; font-weight: 400; color: #dce987; }
+.welcome p { font-size: .9rem; line-height: 1.75; color: #d7e4d4; }
+.welcome ul { display: grid; gap: .65rem; font-size: .8rem; margin: 1.5rem 0 2rem; }
+.welcome li { display: flex; gap: .6rem; align-items: center; }
+.welcome li svg { color: #dce987; flex-shrink: 0; width: 17px; }
+.welcome a { display: inline-flex; align-items: center; gap: .75rem; min-height: 44px; color: #fffdf2; font-size: .8rem; text-decoration: none; border-bottom: 1px solid #91ab8e; }
+.form { align-self: center; min-width: 0; padding: 3rem; }
+.form h1 { font-size: 2.4rem; margin: .75rem 0; }
+.intro { color: var(--muted); margin: 0 0 2rem; font-size: .95rem; }
+.field { margin-top: 1.35rem; }
+.field label, .field input { display: block; width: 100%; }
+.password { position: relative; }
+.password input { padding-right: 3.3rem; }
+.visibility { position: absolute; top: 50%; right: 3px; transform: translateY(-50%); min-height: 42px; width: 42px; padding: 0; color: var(--muted); background: transparent; }
+.visibility:hover, .visibility[aria-pressed="true"] { background: var(--surface-soft); color: var(--accent); }
+.hint { margin: .5rem 0 0; font-size: .78rem; color: var(--muted); }
+.submit { justify-content: space-between; width: 100%; margin-top: 1.8rem; }
+.switch { text-align: center; color: var(--muted); font-size: .8rem; margin: 1.4rem 0 0; }
+.switch a { display: inline-flex; min-height: 44px; align-items: center; font-weight: 600; }
+@media (max-width: 760px) { .layout { grid-template-columns: 1fr; max-width: 30rem; margin: 2rem auto 3rem; } .welcome { padding: 1.5rem 2rem; } .welcome h2 { font-size: 2rem; margin: .75rem 0 0; } .welcome h2 br { display: none; } .welcome h2 em { margin-left: .2em; } .symbol, .welcome p, .welcome ul, .welcome a { display: none; } .form { padding: 2rem; } }
+@media (max-width: 400px) { .form, .welcome { padding: 1.5rem; } .form h1 { font-size: 2rem; } }

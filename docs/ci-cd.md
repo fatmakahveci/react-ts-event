@@ -75,7 +75,7 @@ deployment whose data you want to keep.
 The API does not trust forwarded IP headers. With this proxy, IP-based allowances
 are shared across visitors; account limits still apply independently. Review
 deployment-wide rate limiting at the HTTPS proxy before opening registration
-to the public. See the [security policy](../.github/SECURITY.md).
+to the public. See the [security policy](../SECURITY.md).
 
 ## Update or roll back
 

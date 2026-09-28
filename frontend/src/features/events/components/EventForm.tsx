@@ -3,6 +3,7 @@ import { Form, Link, data, redirect, useActionData, useBeforeUnload, useBlocker,
 import type { EventRecord } from "../types";
 import { apiRequest, responseError } from "../../../lib/api-client";
 import { getSession, clearSession, loginRedirect } from "../../auth/lib/session";
+import Icon from "../../../components/ui/Icon";
 import classes from "./EventForm.module.css";
 
 type FormErrors = { message?: string; errors?: Record<string, string> };
@@ -24,15 +25,18 @@ export default function EventForm({ method, event }: { method: "post" | "patch";
   function errorProps(key: string) { return { "aria-invalid": !!result?.errors?.[key], "aria-describedby": result?.errors?.[key] ? `${key}-error` : undefined }; }
   function error(key: string) { return result?.errors?.[key] && <span className="field-error" id={`${key}-error`}>{result.errors[key]}</span>; }
   return <>
+    <div className={classes.layout}>
     <Form ref={formRef} method={method} className={classes.form} onChange={() => setDirty(true)}>
-      <span className="eyebrow">BRING PEOPLE TOGETHER</span><h1>{event ? "Edit your event" : "Create an event"}</h1><p>Give your community something to look forward to.</p>
+      <span className="eyebrow">BRING PEOPLE TOGETHER</span><h1>{event ? "Edit your event" : "Create an event"}</h1><p className={classes.intro}>Give your community something to look forward to.</p><p className={classes.required}>All fields are required. You can edit the details later.</p>
       {result && <div role="alert" className="form-error"><p>{result.message}</p></div>}
       <p><label htmlFor="title">Event title</label><input id="title" name="title" required maxLength={160} defaultValue={event?.title} placeholder="A great experience starts with a name" {...errorProps("title")} />{error("title")}</p>
       <p><label htmlFor="image">Cover image URL</label><input id="image" name="image" type="url" required maxLength={2048} defaultValue={event?.image} placeholder="https://example.com/your-event.jpg" {...errorProps("image")} />{error("image")}</p>
       <p><label htmlFor="date">Event date</label><input id="date" name="date" type="date" required defaultValue={event?.date} {...errorProps("date")} />{error("date")}</p>
       <p><label htmlFor="description">Description</label><textarea id="description" name="description" required rows={5} maxLength={10000} defaultValue={event?.description} placeholder="What can guests expect?" {...errorProps("description")} />{error("description")}</p>
-      <div className={classes.actions}><Link to={event ? `/events/${event.id}` : "/events"}>Cancel</Link><button disabled={pending}>{pending ? "Saving…" : "Save event"}</button></div>
+      <div className={classes.actions}><Link to={event ? `/events/${event.id}` : "/events"}>Cancel</Link><button disabled={pending}>{pending ? "Saving…" : "Save event"}<Icon name="arrow" /></button></div>
     </Form>
+    <aside className={classes.tips} aria-labelledby="event-tips"><span><Icon name="calendar" /></span><h2 id="event-tips">Make people feel welcome.</h2><ol><li><strong>Give it a clear name</strong><p>Help people understand what the gathering is about at a glance.</p></li><li><strong>Set the scene</strong><p>Choose a cover image that captures the experience.</p></li><li><strong>Share the useful details</strong><p>Include the time, meeting place, and anything guests should bring.</p></li></ol></aside>
+    </div>
     {blocker.state === "blocked" && <div className="confirmation" role="alertdialog" aria-modal="false" aria-labelledby="leave-title"><h2 id="leave-title">Discard your changes?</h2><p>Your event has not been saved.</p><div className={classes.actions}><button autoFocus onClick={() => blocker.reset()}>Keep editing</button><button className="text-button" onClick={() => blocker.proceed()}>Discard changes</button></div></div>}
   </>;
 }

@@ -49,7 +49,7 @@ export default function RootLayout() {
   return <>
     <a className="skip-link" href="#main-content">Skip to content</a><MainNavigation />
     {navigation.state !== "idle" && <div className="navigation-status" role="status">{navigation.state === "submitting" ? "Saving…" : "Loading…"}</div>}
-    {sessionWarning && <p role="status">Your session could not be checked. Please try again when your connection is restored.</p>}
+    {sessionWarning && <p className="session-warning" role="status">Your session could not be checked. Please try again when your connection is restored.</p>}
     <main id="main-content" aria-busy={navigation.state !== "idle"}><Outlet /></main>
     <footer className="site-footer"><span>Gather<span className="brand-dot">.</span></span><p>Good people. Shared experiences. Lasting connections.</p><small>Made for your community.</small></footer>
     <ScrollRestoration />

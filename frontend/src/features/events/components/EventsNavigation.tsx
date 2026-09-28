@@ -6,7 +6,7 @@ const EventsNavigation = () => {
 
 	return (
 		<header className={classes.header}>
-			<nav>
+			<nav aria-label="Event navigation">
 				<ul className={classes.list}>
 					<li>
 						<NavLink

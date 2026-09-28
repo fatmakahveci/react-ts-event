@@ -42,4 +42,4 @@ Run only one API process against a JSON file. Rate limits are per process and
 reset on restart. Sessions now use HttpOnly cookies and are revoked server-side on logout;
 see the subsequent [security fixes](security-hardening.md). Ownership backfill for legacy records requires manual verification.
 See [deployment notes](../README.md#deployment-scope) and the
-[security policy](../.github/SECURITY.md) before a public deployment.
+[security policy](../SECURITY.md) before a public deployment.

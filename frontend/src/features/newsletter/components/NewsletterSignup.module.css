@@ -1,3 +1,5 @@
-.newsletter { display:grid; gap:1rem; max-width:28rem; margin:2rem auto; text-align:left; }
-.newsletter input { width:100%; }
-.newsletter p { color:var(--muted); }
+.newsletter { display: grid; gap: .65rem; max-width: 26rem; margin: 2rem auto 0; text-align: left; }
+.newsletter label { margin-bottom: 0; }
+.newsletter input { width: 100%; }
+.newsletter button { margin-top: .4rem; }
+.newsletter p { margin: .75rem 0 0; padding: .9rem 1rem; border-radius: 9px; background: var(--surface-soft); color: var(--ink); font-size: .85rem; }
