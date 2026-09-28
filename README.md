@@ -1,17 +1,28 @@
 # Gather
 
 Gather is a small app for finding and sharing community events. You can browse
-without an account, filter by date, and save favorites in your browser. Sign in
-to post an event. Only its creator can edit or delete it.
+without an account, search by name or description, and filter past or upcoming
+events. Sign in to post an event. Only its creator can edit or delete it.
 
 The frontend uses React, TypeScript, React Router, and Vite. The backend is an
 Express API that stores data in a local JSON file.
 
-## A quick look
+## Demo
 
-![Browsing events, searching, and creating an event in Gather](docs/assets/demo.gif)
+[![Searching and saving events, then creating and editing a gathering in Gather](docs/assets/demo.gif)](docs/assets/demo.gif)
 
-The recording uses local sample data. A fresh install starts with an empty event list.
+This 29-second walkthrough shows search, favorites, sharing, and creating and
+editing an event, including the prompt that protects an unsaved draft. Recorded
+on September 28, 2026, with temporary sample data. A fresh install starts with an
+empty event list.
+
+Search, sorting, and date filters stay in the URL, so you can bookmark a view or
+share it. The star button saves favorites in the current browser; they aren't
+synced to an account. Each event also has a button for copying its link.
+
+Event forms warn before you leave with unsaved changes. A failed background session
+check keeps an open form intact, and a failed save leaves your entries available
+to retry.
 
 ## Run it locally
 
@@ -51,6 +62,9 @@ from `backend/.env.example`. To load that file, run this from the `backend` dire
 node --env-file=.env src/server.js
 ```
 
+`npm run dev:api` reads exported environment variables; it does not load
+`backend/.env` automatically.
+
 | Variable | Default | What it does |
 | --- | --- | --- |
 | `PORT` | `8080` | Sets the API port. |
@@ -70,7 +84,31 @@ npm run check
 ```
 
 API tests use temporary files. They don't change your local events or accounts.
-For frontend tests that rerun as you edit, use `npm run test:watch --prefix frontend`.
+For shorter feedback loops, run just the checks you need:
+
+| Command | What it runs |
+| --- | --- |
+| `npm test` | Frontend and backend tests. |
+| `npm test --prefix frontend` | Frontend tests once. |
+| `npm run test:watch --prefix frontend` | Frontend tests as you edit. |
+| `npm test --prefix backend` | API and backend unit tests. |
+| `npm run build` | TypeScript checking and the frontend production build. |
+
+The latest local check on September 28, 2026, passed **58 frontend tests and
+36 backend tests**, coverage thresholds, TypeScript checking, and the production
+build on Node 24.21.0. Tests cover event ownership, session revocation, CSRF,
+redirect validation, request limits, and form recovery after connection failures.
+
+Both dependency trees reported no known vulnerabilities in that review. To check
+against the current npm advisory database, run:
+
+```sh
+npm audit --prefix frontend
+npm audit --prefix backend
+```
+
+CI runs the tests, coverage checks, and dependency audits for pull requests and
+pushes to `main`, along with the frontend type check and build.
 
 Most changes belong in one of these directories:
 
@@ -113,8 +151,10 @@ The newsletter form saves email addresses. It doesn't send email yet.
 ## Before deploying
 
 Build with `npm run build` and serve `frontend/dist`. The frontend host needs to
-serve `index.html` for routes such as `/events/new`. Run the API separately with
-`NODE_ENV=production`, `JWT_SECRET`, and `CORS_ORIGIN` set.
+serve `index.html` for routes such as `/events/new`. Set `VITE_API_URL` to the
+deployed API address before building; its value is baked into the bundle.
+Run the API separately with `NODE_ENV=production`, `JWT_SECRET`, and `CORS_ORIGIN`
+set, and initialize its data file before the first start.
 
 A few things matter here:
 
@@ -125,14 +165,34 @@ A few things matter here:
   multiple processes sharing the JSON file are not supported. Move to a
   transactional database before running more than one instance.
 - Review your proxy setup. The API doesn't trust forwarded IP headers by default.
-  Login and signup share a limit of 30 attempts per IP every 15 minutes; newsletter
-  signup allows 10. These limits reset on restart and aren't shared across instances.
+  Configure frontend security headers at the static host; the API's headers only
+  apply to API responses.
 - Email verification and account recovery aren't implemented.
 
+## Sessions and request limits
+
 Sessions use HttpOnly cookies, expire after an hour, and are revoked on logout.
-Up to five sessions can stay active per account. If you're upgrading from the
-older Bearer-token version, sign in again. API clients also need to switch to
-cookies and send the CSRF header described in the
+Up to five sessions can stay active per account. Production cookies use Secure
+and SameSite=Strict. Write requests require `X-Gather-CSRF: 1`, and a supplied
+Origin must exactly match `CORS_ORIGIN`. Login return links are checked after URL
+normalization to keep redirects within the app.
+
+The following limits use a 15-minute window:
+
+| Requests | Per IP | Per account |
+| --- | --- | --- |
+| Login and signup, combined | 30 | — |
+| Newsletter signup | 10 | — |
+| Logout | 30 | — |
+| Event creation, editing, and deletion, combined | 60 | 30 |
+
+IPv6 addresses within one `/56` network share an IP allowance. Limits reset on
+restart and aren't shared across API processes. A blocked request returns HTTP
+429 with a `Retry-After` header; opening another session doesn't reset the account
+limit. Browsing events doesn't use the event write allowance.
+
+If you're upgrading from the older Bearer-token version, sign in again. API
+clients need to preserve cookies and send the CSRF header described in the
 [session migration notes](docs/security-hardening.md#api-migration).
 
 ## More details

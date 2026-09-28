@@ -16,6 +16,26 @@ authorization, request handling, local persistence, and repository automation.
 | Compressed requests could incur decompression work before validation. | Compressed request bodies are rejected; the existing 100 KB JSON limit remains. |
 | Live account data could be accidentally added to Git. | The default live data file is ignored; a separate empty example is committed. Initialization uses exclusive creation and mode 0600. |
 | Dependency advisories were not checked in CI. | Both CI jobs run npm audit at the high-severity threshold, and Dependabot checks both npm projects weekly. |
+| Login return paths could become external redirects after dot-segment normalization. | The normalized pathname is checked again before being used as a redirect destination. |
+| Rotating IPv6 addresses within one allocation bypassed per-address throttling. | Limits now group native IPv6 addresses by `/56` and normalize IPv4-mapped addresses to IPv4. |
+| Event writes and repeated logout requests could repeatedly rewrite the full data file without throttling. | Event mutations share account and IP budgets; logout has an independent IP budget. Rejected requests never reach the storage mutation. |
+
+## Request budgets
+
+Each allowance uses a 15-minute window and returns HTTP 429 with `Retry-After`
+when exhausted. Creating another session does not reset an account allowance.
+
+| Operations | Per IP or IPv6 /56 | Per account |
+| --- | --- | --- |
+| Login and signup, combined | 30 | — |
+| Newsletter subscriptions | 10 | — |
+| Logout | 30 | — |
+| Event creation, editing, and deletion, combined | 60 | 30 |
+
+Event reads and session checks do not consume these write allowances. Limits
+also count failed requests that reach the corresponding limiter. IP limits are
+checked before event authentication; the account limit uses the verified user ID.
+These are local abuse controls, not protection against distributed denial of service.
 
 ## API migration
 
@@ -51,15 +71,21 @@ configuration. Frontend tests cover server-checked sessions, old-token cleanup,
 expiry, return navigation, and unsuccessful logout handling. Browser checks use
 temporary accounts and data to verify the actual cookie and application flows.
 
-Validation on Node 24.21.0 passed 41 frontend tests, 25 backend tests, both coverage
-thresholds, TypeScript checking, and the production build. The Chromium run
+The follow-up review reproduced the redirect bypass, IPv6 limit bypass, and
+unthrottled writes in failing regression tests before applying the fixes. Tests
+now check encoded dot segments, the actual login redirect response, IPv4-mapped
+addresses, account limits across sessions, shared limits across mutation methods,
+and storage remaining unchanged after a rejected request.
+
+Validation on Node 24.21.0 passed 58 frontend tests, 36 backend tests, both coverage
+thresholds, TypeScript checking, and the production build. The earlier Chromium run
 confirmed that page scripts cannot read the cookie, legacy local-storage tokens
 are absent, logout replay returns 401, and the existing event flows still work.
 
 Both full dependency trees reported zero vulnerabilities in `npm audit` on
 2026-09-28. Run `npm run check` for the code checks. This review does not establish
 that every possible vulnerability is absent. JSON storage still supports one API
-process, rate limits remain per process/IP, signup reveals duplicate emails, and
+process, rate limits remain per process, signup reveals duplicate emails, and
 email verification/account recovery are absent. HttpOnly does not prevent a
 compromised browser script from issuing requests. Frontend response headers must
 be configured by its static host; the API headers do not protect a separate host.
@@ -68,4 +94,7 @@ See the [security policy](../.github/SECURITY.md) for deployment boundaries.
 The session and CSRF design follows the relevant guidance in the
 [OWASP session management](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html)
 and [CSRF prevention](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html)
-cheat sheets.
+cheat sheets. Return-path validation and request budgets also follow the
+[redirect validation](https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html)
+and [denial-of-service prevention](https://cheatsheetseries.owasp.org/cheatsheets/Denial_of_Service_Cheat_Sheet.html)
+guidance. Address normalization uses [ipaddr.js](https://github.com/whitequark/ipaddr.js).

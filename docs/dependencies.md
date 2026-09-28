@@ -24,6 +24,11 @@ updates, while `npm ci` installs the locked versions.
 Already-current packages were retained. `@types/node` deliberately follows the
 Node 24 baseline instead of the Node 26 type definitions.
 
+The follow-up security review added `ipaddr.js` 2.5.0 as a direct API dependency
+to normalize IPv4-mapped addresses and group IPv6 request budgets. Express's
+`proxy-addr` dependency still uses its own compatible 1.9.1 copy. The updated
+backend dependency tree also passed `npm audit` with zero reported vulnerabilities.
+
 ## Compatibility
 
 - Use Node 24.15 or newer within 24.x, or Node 26+. The updated jsdom dependency sets the minimum Node 24 patch version. `.nvmrc` and CI select Node 24.

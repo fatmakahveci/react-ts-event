@@ -66,13 +66,19 @@ for a public, multi-user production service:
   Browser script compromise can still act through an active browser session;
   HttpOnly prevents scripts from reading the credential, not every XSS impact.
 - **Authentication abuse:** login and signup share a limit of 30 attempts per IP
-  per 15 minutes; newsletter submissions allow 10. Limits are held in memory,
-  reset on restart, and do not coordinate across processes. Forwarded IP headers
+  per 15 minutes; newsletter submissions allow 10 and logout has its own limit
+  of 30. Event creation, editing, and deletion share a limit of 30 per account
+  and 60 per IP per 15 minutes. New sessions do not reset the account allowance.
+  IPv4-mapped IPv6 addresses share the IPv4 budget; native IPv6 clients share a
+  budget within a `/56` network. Limits are held in memory, reset on restart,
+  and do not coordinate across processes. Forwarded IP headers
   are not trusted by default. Account lockout and email verification are absent.
   Signup passwords must contain at least 8 characters and at most 72 UTF-8 bytes.
   Missing-account login attempts perform a dummy password comparison; this
   removes the obvious missing-account fast path, without guaranteeing identical
   timings. Signup still identifies duplicate email addresses.
+- **Return navigation:** post-login destinations must stay within the app after
+  URL normalization. Paths that become a protocol-relative external URL are rejected.
 - **Persistence:** users, sessions, events, and newsletter subscriptions share a JSON file.
   Mutations are queued within one API process and committed by atomic rename with
   restrictive file permissions. This is not a multi-process transaction system;

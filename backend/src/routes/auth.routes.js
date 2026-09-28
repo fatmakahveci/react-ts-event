@@ -38,7 +38,8 @@ router.post("/login", limit, async (req, res, next) => {
   }
 });
 router.get("/session", checkAuth, (req, res) => res.json({ user: req.user, expiresAt: req.token.exp * 1000 }));
-router.post("/logout", async (req, res, next) => {
+// A separate allowance keeps failed logins or event writes from preventing logout.
+router.post("/logout", createRateLimit(), async (req, res, next) => {
   try { await endSession(req, res); res.sendStatus(204); }
   catch (error) { next(error); }
 });

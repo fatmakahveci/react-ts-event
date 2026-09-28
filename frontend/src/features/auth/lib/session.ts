@@ -36,7 +36,8 @@ export function safeReturnTo(value: string | null) {
   if (!value || !value.startsWith("/") || value.startsWith("//") || /[\\\r\n]/.test(value)) return "/";
   // Normalize against a fixed origin before accepting a post-login destination.
   const url = new URL(value, "https://gather.local");
-  if (url.origin !== "https://gather.local" || ["/auth", "/logout"].includes(url.pathname)) return "/";
+  // Dot-segment removal can turn a local path into //host when returned as a relative URL.
+  if (url.origin !== "https://gather.local" || url.pathname.startsWith("//") || ["/auth", "/logout"].includes(url.pathname)) return "/";
   return url.pathname + url.search + url.hash;
 }
 export function loginRedirect(path: string) {

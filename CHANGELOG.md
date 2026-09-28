@@ -37,6 +37,9 @@ where applicable.
 
 ### Security
 
+- Reject login return paths that normalize into external redirects, including encoded dot segments.
+- Group IPv6 request limits by `/56` and normalize IPv4-mapped addresses to prevent address-based budget resets.
+- Limit event mutations per account and IP, and throttle logout independently to bound repeated storage writes. Add regression coverage for rejected writes and shared budgets.
 - Replace JavaScript-readable Bearer tokens with HttpOnly cookie sessions and persistent server-side revocation on logout. Reject legacy, unregistered, revoked, expired, and deleted-user sessions.
 - Require exact-origin checks and a CSRF protection header for unsafe requests, including login/logout; use Secure host-only cookies and an explicit HTTPS frontend origin in production.
 - Validate JWT issuer, audience, algorithm, expiration, and session claims; rotate sessions on login and cap active sessions per account.
