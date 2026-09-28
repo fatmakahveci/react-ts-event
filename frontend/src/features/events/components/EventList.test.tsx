@@ -64,3 +64,27 @@ test("filters past and upcoming dates and tolerates corrupted favorites", () => 
   fireEvent.change(screen.getByLabelText("When"), { target: { value: "past" } });
   expect(screen.getByRole("heading", { name: "Zebra meetup" })).toBeInTheDocument();
 });
+
+test("reports unavailable storage without claiming a favorite was saved", () => {
+  vi.spyOn(localStorage, "setItem").mockImplementation(() => { throw new Error("Quota exceeded"); });
+  render(<MemoryRouter><EventList events={events} /></MemoryRouter>);
+  const favorite = screen.getByRole("button", { name: "Save Art workshop to favorites" });
+  fireEvent.click(favorite);
+  expect(screen.getByRole("alert")).toHaveTextContent("Your browser could not save favorites");
+  expect(favorite).toHaveAttribute("aria-pressed", "false");
+  expect(localStorage.getItem("gather:favorite-events")).toBeNull();
+});
+
+test("synchronizes favorites between lists in the same tab and from another tab", () => {
+  render(<MemoryRouter><EventList events={events} /><EventList events={events} related /></MemoryRouter>);
+  fireEvent.click(screen.getAllByRole("button", { name: "Save Art workshop to favorites" })[0]);
+  const saved = screen.getAllByRole("button", { name: "Remove Art workshop from favorites" });
+  expect(saved).toHaveLength(2);
+  saved.forEach(button => expect(button).toHaveAttribute("aria-pressed", "true"));
+
+  localStorage.setItem("gather:favorite-events", "[]");
+  fireEvent(window, new StorageEvent("storage", { key: "gather:favorite-events", newValue: "[]" }));
+  const removed = screen.getAllByRole("button", { name: "Save Art workshop to favorites" });
+  expect(removed).toHaveLength(2);
+  removed.forEach(button => expect(button).toHaveAttribute("aria-pressed", "false"));
+});

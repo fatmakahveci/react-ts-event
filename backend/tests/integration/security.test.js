@@ -150,3 +150,23 @@ test("production requires an exact HTTPS origin and a signing secret", () => {
   assert.equal(config.cookieName, "__Host-gather_session");
   assert.deepEqual(config.cookieOptions, { httpOnly: true, secure: true, sameSite: "strict", path: "/" });
 });
+
+test("logging out on one device does not revoke another device's session", async () => {
+  const first = cookie(await signup());
+  const second = cookie(await request().post("/login").send(credentials).expect(200));
+  await request().post("/logout").set("Cookie", first).send({}).expect(204);
+  await request().get("/session").set("Cookie", first).expect(401);
+  await request().get("/session").set("Cookie", second).expect(200);
+});
+
+test("CSRF protection covers updates and deletes even with a valid owner cookie", async () => {
+  const savedCookie = cookie(await signup());
+  const created = await request().post("/events").set("Cookie", savedCookie).send(event).expect(201);
+  const endpoint = `/events/${created.body.event.id}`;
+  await supertest(app).patch(endpoint).set("Cookie", savedCookie).set("Origin", process.env.CORS_ORIGIN)
+    .send({ ...event, title: "Forged update" }).expect(403);
+  await supertest(app).delete(endpoint).set("Cookie", savedCookie).set("Origin", process.env.CORS_ORIGIN).expect(403);
+  await request().delete(endpoint).set("Cookie", savedCookie).set("Origin", "https://evil.example").expect(403);
+  const unchanged = await request().get(endpoint).expect(200);
+  assert.equal(unchanged.body.event.title, event.title);
+});

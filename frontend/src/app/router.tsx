@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import type { RouteObject } from "react-router-dom";
 import { action as manipulateEventAction } from "../features/events/components/EventForm";
 import AuthPage, {
 	action as authAction,
@@ -18,15 +18,20 @@ import NewsletterPage, { action as newsletterAction } from "../features/newslett
 import RootLayout from "./layouts/RootLayout";
 import { checkAuthLoader, sessionLoader } from "../features/auth/lib/session";
 
-export const router = createBrowserRouter([
+// Share the same route definitions between the browser app and integration tests.
+export const routes: RouteObject[] = [
 	{
 		path: "/",
 		element: <RootLayout />,
 		errorElement: <ErrorPage />,
         hydrateFallbackElement: <p role="status">Loading Gather…</p>,
 		id: "root",
-        // TODO: Skip this check for event-filter-only navigation; slow responses currently drop typed characters.
 		loader: sessionLoader,
+        // Discovery filters use the loaded collection and must not wait for an auth round trip.
+        // Actions, explicit refreshes, and navigation to other pages still revalidate normally.
+        shouldRevalidate: ({ currentUrl, nextUrl, formMethod, defaultShouldRevalidate }) =>
+            !formMethod && currentUrl.pathname === "/events" && nextUrl.pathname === "/events" && currentUrl.search !== nextUrl.search
+                ? false : defaultShouldRevalidate,
 		children: [
 			{ index: true, element: <HomePage /> },
 			{
@@ -81,4 +86,4 @@ export const router = createBrowserRouter([
 			},
 		],
 	},
-]);
+];

@@ -1,10 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Outlet, ScrollRestoration, useLoaderData, useLocation, useMatches, useNavigation, useRevalidator, useSubmit } from "react-router-dom";
 import MainNavigation from "../../components/layout/MainNavigation";
-import { SESSION_CHANGE_KEY, type Session } from "../../features/auth/lib/session";
+import { sessionLoader, SESSION_CHANGE_KEY, type Session } from "../../features/auth/lib/session";
 
 export default function RootLayout() {
   const session = useLoaderData() as Session | null;
+  const [sessionWarning, setSessionWarning] = useState(false);
   const submit = useSubmit();
   const navigation = useNavigation();
   const { revalidate } = useRevalidator();
@@ -18,13 +19,29 @@ export default function RootLayout() {
     return () => clearTimeout(timer);
   }, [session, submit]);
   useEffect(() => {
-    const sync = (event: StorageEvent) => { if (!event.key || event.key === SESSION_CHANGE_KEY) void revalidate(); };
-    // TODO: Keep transient session-check failures from unmounting a form with unsaved changes.
-    const focus = () => { void revalidate(); };
+    setSessionWarning(false);
+    let controller: AbortController | undefined;
+    const refresh = async () => {
+      controller?.abort();
+      const current = controller = new AbortController();
+      try {
+        // Check in the background first: a temporary outage must not replace an open form.
+        const verified = await sessionLoader({ request: new Request(window.location.href, { signal: current.signal }) });
+        if (current.signal.aborted) return;
+        setSessionWarning(false);
+        if (verified?.user.id !== session?.user.id || verified?.user.email !== session?.user.email || verified?.expiresAt !== session?.expiresAt) {
+          void revalidate();
+        }
+      } catch {
+        if (!current.signal.aborted) setSessionWarning(true);
+      }
+    };
+    const sync = (event: StorageEvent) => { if (!event.key || event.key === SESSION_CHANGE_KEY) void refresh(); };
+    const focus = () => { void refresh(); };
     window.addEventListener("storage", sync);
     window.addEventListener("focus", focus);
-    return () => { window.removeEventListener("storage", sync); window.removeEventListener("focus", focus); };
-  }, [revalidate]);
+    return () => { controller?.abort(); window.removeEventListener("storage", sync); window.removeEventListener("focus", focus); };
+  }, [revalidate, session]);
   useEffect(() => {
     const title = pathname.endsWith("/edit") ? "Edit event" : pathname === "/events/new" ? "Create an event" : eventTitle || ({ "/": "Experiences worth sharing", "/events": "Explore events", "/auth": "Your account", "/newsletter": "Newsletter" }[pathname] || "Gather");
     document.title = `${title} · Gather`;
@@ -32,6 +49,7 @@ export default function RootLayout() {
   return <>
     <a className="skip-link" href="#main-content">Skip to content</a><MainNavigation />
     {navigation.state !== "idle" && <div className="navigation-status" role="status">{navigation.state === "submitting" ? "Saving…" : "Loading…"}</div>}
+    {sessionWarning && <p role="status">Your session could not be checked. Please try again when your connection is restored.</p>}
     <main id="main-content" aria-busy={navigation.state !== "idle"}><Outlet /></main>
     <footer className="site-footer"><span>Gather<span className="brand-dot">.</span></span><p>Good people. Shared experiences. Lasting connections.</p><small>Made for your community.</small></footer>
     <ScrollRestoration />

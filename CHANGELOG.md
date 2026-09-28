@@ -10,6 +10,7 @@ where applicable.
 
 ### Added
 
+- Route integration tests for slow search, interrupted session checks, cross-tab logout, login redirects, and event ownership; additional API throttling, CSRF, and password-boundary tests.
 - URL-based discovery filters, date filters, pagination, and persistent favorites.
 - Event sharing, image fallbacks, unsaved-form protection, and accessible field errors.
 - Persistent newsletter subscriptions with validation and duplicate handling.
@@ -28,6 +29,8 @@ where applicable.
 
 ### Fixed
 
+- Event filters no longer wait for session revalidation on each keystroke, preventing lost search characters on slow connections.
+- Background session checks preserve open forms during connection failures and revalidate routes only after a verified session change.
 - Concurrent JSON mutations now use a write queue and atomic file replacement.
 - Account email normalization and duplicate checks run consistently across signup and login.
 - Network errors and cancelled requests use a shared API client.

@@ -248,3 +248,17 @@ test("persists newsletter subscriptions once and validates input", async () => {
   assert.equal(store.subscriptions.length, 1);
   assert.equal(store.subscriptions[0].email, "reader@example.com");
 });
+
+test("applies bcrypt's password boundary to UTF-8 bytes without truncating", async () => {
+  const password = "😀".repeat(18);
+  assert.equal(Buffer.byteLength(password, "utf8"), 72);
+  await request(app).post("/signup").send({ email: "unicode@example.com", password }).expect(201);
+  await request(app).post("/login").send({ email: "unicode@example.com", password }).expect(200);
+  await request(app).post("/login").send({ email: "unicode@example.com", password: password + "x" }).expect(401);
+  const rejected = await request(app).post("/signup")
+    .send({ email: "too-long@example.com", password: password + "😀" }).expect(422);
+  assert.ok(rejected.body.errors.password);
+  const store = JSON.parse(await fs.readFile(dataFile, "utf8"));
+  assert.equal(store.users.length, 1);
+  assert.notEqual(store.users[0].password, password);
+});
