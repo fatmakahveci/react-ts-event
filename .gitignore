@@ -46,3 +46,6 @@ next-env.d.ts
 # Live application data contains password hashes, session records, and emails.
 /backend/storage/application-data.json
 /backend/storage/*.tmp
+
+# Temporary CI image exports.
+/runtime-images.tar.gz*

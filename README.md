@@ -7,6 +7,8 @@ events. Sign in to post an event. Only its creator can edit or delete it.
 The frontend uses React, TypeScript, React Router, and Vite. The backend is an
 Express API that stores data in a local JSON file.
 
+[![CI/CD](https://github.com/fatmakahveci/react-ts-event/actions/workflows/ci.yml/badge.svg)](https://github.com/fatmakahveci/react-ts-event/actions/workflows/ci.yml)
+
 ## Demo
 
 [![Searching and saving events, then creating and editing a gathering in Gather](docs/assets/demo.gif)](docs/assets/demo.gif)
@@ -107,8 +109,13 @@ npm audit --prefix frontend
 npm audit --prefix backend
 ```
 
-CI runs the tests, coverage checks, and dependency audits for pull requests and
-pushes to `main`, along with the frontend type check and build.
+CI runs these checks for pull requests and pushes to `main`, then starts the
+production Docker containers and checks the full HTTP stack. Successful `main`
+runs publish the tested API and web images to GitHub Container Registry. Coverage
+reports, the frontend build, and image archives are available from the workflow
+run. Scheduled weekly checks also look for dependency advisories.
+
+See [CI/CD and deployment](docs/ci-cd.md) for image names, setup, and rollback.
 
 Most changes belong in one of these directories:
 
@@ -149,6 +156,11 @@ person's existing user ID.
 The newsletter form saves email addresses. It doesn't send email yet.
 
 ## Before deploying
+
+To run the published Docker images, follow the
+[container deployment instructions](docs/ci-cd.md#run-the-published-images).
+They use a single public origin and keep data in a persistent volume. Publishing
+an image does not deploy a public website; you still need an HTTPS host.
 
 Build with `npm run build` and serve `frontend/dist`. The frontend host needs to
 serve `index.html` for routes such as `/events/new`. Set `VITE_API_URL` to the
@@ -198,6 +210,7 @@ clients need to preserve cookies and send the CSRF header described in the
 ## More details
 
 - [Contributing](.github/CONTRIBUTING.md)
+- [CI/CD and deployment](docs/ci-cd.md)
 - [Reporting a security issue](.github/SECURITY.md)
 - [Security fixes and remaining limits](docs/security-hardening.md)
 - [Feature changes](docs/improvements.md)

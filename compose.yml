@@ -1,0 +1,40 @@
+name: gather
+
+services:
+  api:
+    image: ${GATHER_IMAGE_PREFIX:-ghcr.io/fatmakahveci/react-ts-event}-api:${GATHER_IMAGE_TAG:-main}
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.api
+    environment:
+      NODE_ENV: production
+      CORS_ORIGIN: ${CORS_ORIGIN:?Set the public HTTPS origin}
+      JWT_SECRET: ${JWT_SECRET:?Set a random signing secret of at least 32 characters}
+      EVENTS_DATA_FILE: /data/application-data.json
+    volumes:
+      - application-data:/data
+    read_only: true
+    tmpfs: [/tmp]
+    init: true
+    restart: unless-stopped
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+
+  web:
+    image: ${GATHER_IMAGE_PREFIX:-ghcr.io/fatmakahveci/react-ts-event}-web:${GATHER_IMAGE_TAG:-main}
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.web
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - '127.0.0.1:${GATHER_PORT:-8080}:8080'
+    read_only: true
+    tmpfs: [/tmp]
+    restart: unless-stopped
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+
+volumes:
+  application-data:

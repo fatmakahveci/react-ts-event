@@ -10,6 +10,8 @@ where applicable.
 
 ### Added
 
+- CI/CD with workflow validation, build and coverage artifacts, production container smoke checks, and automatic publication of tested API/web images from `main`.
+- Docker Compose deployment with persistent data, non-root containers, same-origin API proxying, and documented rollback by commit tag.
 - Route integration tests for slow search, interrupted session checks, cross-tab logout, login redirects, and event ownership; additional API throttling, CSRF, and password-boundary tests.
 - URL-based discovery filters, date filters, pagination, and persistent favorites.
 - Event sharing, image fallbacks, unsaved-form protection, and accessible field errors.
@@ -37,6 +39,7 @@ where applicable.
 
 ### Security
 
+- Require successful CI and runtime checks before publishing source packages or runnable container images; keep registry write permissions in publication jobs.
 - Reject login return paths that normalize into external redirects, including encoded dot segments.
 - Group IPv6 request limits by `/56` and normalize IPv4-mapped addresses to prevent address-based budget resets.
 - Limit event mutations per account and IP, and throttle logout independently to bound repeated storage writes. Add regression coverage for rejected writes and shared budgets.
